@@ -1,0 +1,5 @@
+FREELANCER_PROFILES = "freelancer_profiles"
+PROJECT_IDEAS = "project_ideas"
+PROJECT_REQUIREMENTS = "project_requirements"
+PROJECT_MATCH_SET = "project_match_set"
+PROJECT_MATCHES = "project_matches"
