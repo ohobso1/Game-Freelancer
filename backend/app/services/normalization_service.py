@@ -8,6 +8,15 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from app.db.collections import ROLE_CATALOG, SKILL_CATALOG
 
 _WHITESPACE_RE = re.compile(r"\s+")
+_SKILL_FALLBACK_ALIASES = {
+    "2d-game-development": "Unity",
+    "2d-game-dev": "Unity",
+    "game-development": "Unity",
+    "systems-design": "Gameplay Systems",
+    "system-design": "Gameplay Systems",
+    "game-systems": "Gameplay Systems",
+    "multiplayer": "Netcode",
+}
 
 
 def slugify(value: str) -> str:
@@ -52,6 +61,8 @@ async def _build_alias_map(db: AsyncIOMotorDatabase, collection: str) -> dict[st
 
 async def normalize_skills(db: AsyncIOMotorDatabase, values: Iterable[str]) -> list[str]:
     alias_map = await _build_alias_map(db, SKILL_CATALOG)
+    for alias, canonical in _SKILL_FALLBACK_ALIASES.items():
+        alias_map.setdefault(alias, canonical)
 
     output: list[str] = []
     for value in values:

@@ -3,7 +3,8 @@ from datetime import datetime, timezone
 from fastapi import HTTPException
 
 from app.db.client import get_database
-from app.db.collections import PROJECT_IDEAS, PROJECT_REQUIREMENTS
+from app.db.collections import PROJECT_IDEAS, PROJECT_REQUIREMENTS, ROLE_CATALOG, SKILL_CATALOG
+from app.config import settings
 from app.integrations.gemini_client import GeminiClient
 from app.schemas.common import parse_object_id
 from app.schemas.parsing import ParsedRequirements
@@ -21,8 +22,18 @@ async def parse_and_store_requirements(project_id: str) -> dict:
     if project is None:
         raise HTTPException(status_code=404, detail="Project not found")
 
+    skill_docs = await db[SKILL_CATALOG].find({}, {"canonical_name": 1}).to_list(length=2000)
+    role_docs = await db[ROLE_CATALOG].find({}, {"canonical_name": 1}).to_list(length=500)
+    allowed_skills = [doc.get("canonical_name", "") for doc in skill_docs if doc.get("canonical_name")]
+    allowed_roles = [doc.get("canonical_name", "") for doc in role_docs if doc.get("canonical_name")]
+
+    selected_model = settings.gemini_model
     try:
-        parsed_raw = await gemini_client.parse_project_prompt(project["raw_prompt"])
+        parsed_raw, selected_model = await gemini_client.parse_project_prompt(
+            project["raw_prompt"],
+            allowed_skills=allowed_skills,
+            allowed_roles=allowed_roles,
+        )
         parsed = ParsedRequirements.model_validate(parsed_raw)
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Failed to parse prompt with Gemini: {exc}") from exc
@@ -62,7 +73,7 @@ async def parse_and_store_requirements(project_id: str) -> dict:
         "raw_llm_output": parsed_raw,
         "parser": {
             "provider": "gemini",
-            "model": "gemini-2.0-flash",
+            "model": selected_model,
             "schema_version": "v1",
         },
         "created_at": now,

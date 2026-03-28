@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     mongodb_uri: str = ""
     mongodb_database: str = "game_freelancer"
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-2.0-flash"
+    gemini_model: str = "gemini-flash-latest"
     gemini_timeout_seconds: float = 20.0
     allow_origins: str = "http://localhost:5173,http://localhost:3000"
 
