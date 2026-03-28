@@ -1,4 +1,6 @@
 FREELANCER_PROFILES = "freelancer_profiles"
+SKILL_CATALOG = "skill_catalog"
+ROLE_CATALOG = "role_catalog"
 PROJECT_IDEAS = "project_ideas"
 PROJECT_REQUIREMENTS = "project_requirements"
 PROJECT_MATCH_SET = "project_match_set"

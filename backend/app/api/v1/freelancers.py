@@ -4,6 +4,7 @@ from app.db.client import get_database
 from app.db.collections import FREELANCER_PROFILES
 from app.schemas.freelancer import FreelancerListResponse, FreelancerProfile
 from app.schemas.common import parse_object_id
+from app.services.normalization_service import normalize_skills
 
 
 router = APIRouter()
@@ -16,11 +17,14 @@ async def list_freelancers(
     max_rate: float | None = Query(default=None, ge=0),
     min_availability: int | None = Query(default=None, ge=0),
 ):
+    """Return freelancers filtered by optional skill, rate range, and availability."""
     db = get_database()
 
     query: dict = {}
     if skill:
-        query["skills"] = {"$in": [skill]}
+        normalized_skills = await normalize_skills(db, [skill])
+        selected_skill = normalized_skills[0] if normalized_skills else skill.strip()
+        query["skills_normalized"] = {"$in": [selected_skill]}
     if min_rate is not None or max_rate is not None:
         query["hourly_rate_usd"] = {}
         if min_rate is not None:
@@ -41,6 +45,7 @@ async def list_freelancers(
 
 @router.get("/freelancers/{freelancer_id}", response_model=FreelancerProfile)
 async def get_freelancer(freelancer_id: str):
+    """Return a single freelancer profile by its identifier."""
     db = get_database()
     doc = await db[FREELANCER_PROFILES].find_one({"_id": parse_object_id(freelancer_id)})
     if doc is None:

@@ -8,11 +8,14 @@ Minimal FastAPI backend for project prompt parsing (Gemini), fake freelancer pro
 2. Install dependencies:
    - `pip install -r requirements.txt`
 3. Run index creation:
-   - `python scripts/create_indexes.py`
+   - `python backend/scripts/create_indexes.py`
 4. Seed fake freelancers:
-   - `python scripts/seed_fake_freelancers.py`
+   - `python backend/scripts/seed_fake_freelancers.py`
+   - default seeds 60 freelancers + skill/role catalogs
+   - custom count: `python backend/scripts/seed_fake_freelancers.py --count 80`
+   - append mode: `python backend/scripts/seed_fake_freelancers.py --count 20 --append`
 5. Start API:
-   - `uvicorn app.main:app --reload`
+   - `uvicorn app.main:app --reload --app-dir backend`
 
 ## API endpoints
 

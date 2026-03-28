@@ -11,6 +11,7 @@ from app.db.collections import (
     PROJECT_REQUIREMENTS,
 )
 from app.schemas.common import parse_object_id
+from app.services.normalization_service import normalize_skills
 
 
 def _score_candidate(required_skills: set[str], optional_skills: set[str], freelancer_skills: set[str]) -> tuple[float, dict, list[str], list[str]]:
@@ -41,15 +42,19 @@ async def generate_matches(project_id: str, top_n: int = 20) -> dict:
     if requirements is None:
         raise HTTPException(status_code=400, detail="Project requirements not found. Parse prompt first.")
 
-    required_skills = {skill.lower().strip() for skill in requirements.get("required_skills", [])}
-    optional_skills = {skill.lower().strip() for skill in requirements.get("optional_skills", [])}
+    normalized_required = await normalize_skills(db, requirements.get("required_skills", []))
+    normalized_optional = await normalize_skills(db, requirements.get("optional_skills", []))
+
+    required_skills = {skill.lower().strip() for skill in normalized_required}
+    optional_skills = {skill.lower().strip() for skill in normalized_optional}
 
     freelancers = await db[FREELANCER_PROFILES].find({}).to_list(length=1000)
     now = datetime.now(tz=timezone.utc)
 
     scored = []
     for freelancer in freelancers:
-        skills = {item.lower().strip() for item in freelancer.get("skills", [])}
+        skill_source = freelancer.get("skills_normalized") or freelancer.get("skills", [])
+        skills = {item.lower().strip() for item in skill_source}
         score, breakdown, matched_required, matched_optional = _score_candidate(required_skills, optional_skills, skills)
 
         if score <= 0:
