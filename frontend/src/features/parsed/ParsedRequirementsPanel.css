@@ -1,5 +1,5 @@
 .parsed-panel {
-  background: white;
+  background: var(--surface-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -73,7 +73,7 @@
 }
 
 .role-count {
-  background: white;
+  background: var(--surface-bg);
   padding: 0.2rem 0.6rem;
   border-radius: 3px;
   color: var(--text-h);
@@ -81,7 +81,7 @@
 }
 
 .role-seniority {
-  background: white;
+  background: var(--surface-bg);
   padding: 0.2rem 0.6rem;
   border-radius: 3px;
   color: var(--text);
@@ -126,7 +126,7 @@
   flex-direction: column;
   gap: 0.4rem;
   padding: 1rem;
-  background: #f9f9f9;
+  background: var(--code-bg);
   border-radius: 4px;
   border-left: 3px solid var(--accent);
 }
@@ -157,7 +157,7 @@
   gap: 1rem;
   padding: 1.5rem 2rem;
   border-top: 1px solid var(--border);
-  background: #f9f9f9;
+  background: var(--code-bg);
 }
 
 .action-button {
@@ -177,7 +177,7 @@
 }
 
 .edit-button {
-  background: white;
+  background: var(--surface-bg);
   color: var(--accent);
   border: 2px solid var(--accent);
 }

@@ -3,6 +3,12 @@
   --text-h: #000;
   --bg: #fafafa;
   --border: #e0e0e0;
+  --surface-bg: #ffffff;
+  --field-bg: #ffffff;
+  --field-text: #111827;
+  --label-text: #111827;
+  --muted-text: #4b5563;
+  --placeholder-text: #6b7280;
   --code-bg: #f5f5f5;
   --accent: #667eea;
   --accent-bg: rgba(102, 126, 234, 0.08);
@@ -83,10 +89,16 @@ textarea {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
+    --text: #d1d5db;
     --text-h: #f3f4f6;
     --bg: #16171d;
     --border: #2e303a;
+    --surface-bg: #1f2028;
+    --field-bg: #151821;
+    --field-text: #f3f4f6;
+    --label-text: #f3f4f6;
+    --muted-text: #d1d5db;
+    --placeholder-text: #9ca3af;
     --code-bg: #1f2028;
     --accent: #c084fc;
     --accent-bg: rgba(192, 132, 252, 0.15);
@@ -115,6 +127,8 @@ textarea {
 
 body {
   margin: 0;
+  color: var(--text);
+  background: var(--bg);
 }
 
 h1,

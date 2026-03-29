@@ -1,5 +1,5 @@
 .prompt-form {
-  background: white;
+  background: var(--surface-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 2rem;
@@ -17,7 +17,7 @@
 .form-group label {
   display: block;
   font-weight: 600;
-  color: var(--text-h);
+  color: var(--label-text);
   margin-bottom: 0.5rem;
   font-size: 0.95rem;
 }
@@ -30,9 +30,14 @@
   border-radius: 4px;
   font-size: 1rem;
   font-family: var(--sans);
-  color: var(--text-h);
-  background: white;
+  color: var(--field-text);
+  background: var(--field-bg);
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--placeholder-text);
 }
 
 .form-input:focus,
@@ -44,7 +49,7 @@
 
 .form-input:disabled,
 .form-textarea:disabled {
-  background-color: #f5f5f5;
+  background-color: var(--code-bg);
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -56,7 +61,7 @@
 
 .form-hint {
   display: block;
-  color: var(--text);
+  color: var(--muted-text);
   font-size: 0.85rem;
   margin-top: 0.4rem;
   opacity: 0.8;
