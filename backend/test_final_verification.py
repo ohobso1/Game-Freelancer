@@ -93,7 +93,7 @@ async def run_final_verification():
             # 5. Matching Algorithm
             print("  5. Matching Algorithm... ", end='', flush=True)
             try:
-                r = await client.post(f'{base_url}/matching/{proj_id}', json={'top_n': 10})
+                r = await client.post(f'{base_url}/matching/{proj_id}', json={'top_n': 10}) # type: ignore
                 match_ok = r.status_code == 200
                 if match_ok:
                     matches = r.json()['matches']
